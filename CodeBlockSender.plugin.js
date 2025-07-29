@@ -40,7 +40,7 @@ module.exports = (() => {
         start() {}
         stop() {}
     } : (([Plugin, Library]) => {
-        const { Patcher, WebpackModules, DOMTools, PluginUtilities, Toasts, Data } = Library;
+        const { Patcher, WebpackModules, PluginUtilities, Toasts } = Library;
 
         return class CodeBlockSender extends Plugin {
             constructor() {
@@ -51,7 +51,7 @@ module.exports = (() => {
             }
 
             onStart() {
-                this.enabled = Data.load(this.pluginName, this.settingsKey) ?? true;
+                this.enabled = PluginUtilities.loadData(this.pluginName, this.settingsKey) ?? true;
                 this.patchSendMessage();
                 this.injectToggleButton();
             }
@@ -92,7 +92,7 @@ module.exports = (() => {
                     btn.onclick = () => {
                         this.enabled = !this.enabled;
                         btn.style.backgroundColor = this.enabled ? "#5865f2" : "#4f545c";
-                        Data.save(this.pluginName, this.settingsKey, this.enabled);
+                        PluginUtilities.saveData(this.pluginName, this.settingsKey, this.enabled);
                         Toasts.show(`CodeBlockSender ${this.enabled ? "enabled" : "disabled"}`, { type: "info" });
                     };
                     btn.id = "codeblock-toggle-btn";
